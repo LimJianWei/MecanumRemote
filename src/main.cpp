@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
-#include "C:\Users\Lim Jian Wei\Documents\PlatformIO\Projects\MecanumRemote\.pio\libdeps\nodemcuv2\WebSockets\src\WebSocketsServer.h"
+#include "..\.pio\libdeps\nodemcuv2\WebSockets\src\WebSocketsServer.h"
 #include <FS.h>
 #include <cmath>
 
@@ -121,7 +121,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t lenght)
       //IPAddress foo = webSocket.remoteIP(num);
       break;
     case WStype_TEXT:
-      //Serial.println((char*)payload);
+      Serial.println((char*)payload);
       char* endPtr;
       //Serial.println(payload[0]);
       if(payload[0]=='L'||payload[0]=='R')//not important which joystick for now
@@ -164,7 +164,7 @@ void handleEndInputPoll()
 void handleShiftDir(float distance, float degree, bool isitR)
 {
   const float pwmAmplitude = 255.0f;//1023
-  if(!isitR)
+  if(!isitR)//Left
   {
     //distance and degree to each wheel to scale of -1<x<1
     float wheel14 = distance/100.0f*calcShiftDir(degree);
@@ -183,7 +183,7 @@ void handleShiftDir(float distance, float degree, bool isitR)
     analogWrite(pinPWM[2], static_cast<int>(pwmAmplitude*abs_wheel23));
     analogWrite(pinPWM[3], static_cast<int>(pwmAmplitude*abs_wheel14));
   }
-  else
+  else//Right
   {
     
     float wheel13 = distance/100.0f*calcShiftDir(degree+180.0f);
