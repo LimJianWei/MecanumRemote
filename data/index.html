@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OmniWheel</title>
+        <script src="WebSocket.js" type="text/javascript"></script>
+        <script src="nipplejs.js"></script>
+        <meta name="theme-color" content="#A5D684">
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
+        <style>
+            html, body {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                padding: 0;
+                margin: 0;
+            }
+    
+            #left {
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 100%;
+                width: 50%;
+                background: rgba(0, 255, 0, 0.1);
+            }
+    
+            #right {
+                position: absolute;
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 50%;
+                background: rgba(0, 0, 255, 0.1);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="left"></div>
+        <div id="right"></div>
+        <script src="nipplejs.js"></script>
+        <script>
+            var joystickL = nipplejs.create({
+                zone: document.getElementById('left'),
+                mode: 'static',
+                position: { left: '40%', top: '50%' },
+                color: 'green',
+                size: 200
+            });
+
+            var joystickR = nipplejs.create({
+                zone: document.getElementById('right'),
+                mode: 'static',
+                position: { left: '60%', top: '50%' },
+                color: 'red',
+                size: 200
+            });
+            var lazy = 3;
+            joystickL.on('move', function(evt, data){
+                var positionL = data;
+                var degreeL = positionL.angle.degree.toFixed(lazy);
+                var distanceL = positionL.distance.toFixed(lazy);
+                connection.send('L'+distanceL.toString()+' '+degreeL.toString());
+            });
+            joystickL.on('end', function(evt, data){
+                connection.send('LE');
+            });
+
+            joystickR.on('move', function(evt, data){
+                var positionR = data;
+                var degreeR = positionR.angle.degree.toFixed(lazy);
+                var distanceR = positionR.distance.toFixed(lazy);
+                connection.send('R'+distanceR.toString()+' '+degreeR.toString());
+            });
+            joystickR.on('end', function(evt, data){
+                connection.send('RE');
+            });
+            
+        </script>
+    </body>
+</html>
